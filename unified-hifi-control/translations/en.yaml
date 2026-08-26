@@ -1,0 +1,19 @@
+configuration:
+  port:
+    name: Port
+    description: >-
+      HTTP port for the Unified Hi-Fi Control web UI and API. Change this
+      only if 8088 conflicts with another service on your network (for
+      example, HQPlayer, which also defaults to 8088).
+  log_level:
+    name: Log level
+    description: >-
+      Verbosity of the add-on log. `info` is recommended; use `debug` or
+      `trace` when troubleshooting adapter/discovery issues.
+  require_controller_auth:
+    name: Require controller auth
+    description: >-
+      When enabled, provider pairing and account actions require the
+      one-time controller bootstrap token (shown in this add-on's log on
+      first start) instead of trusting any LAN client. Leave off for a
+      typical single-household LAN setup.

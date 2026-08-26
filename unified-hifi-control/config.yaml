@@ -1,0 +1,38 @@
+# https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
+name: Unified Hi-Fi Control
+version: "3.6.0"
+slug: unified_hifi_control
+description: >-
+  Bridge Roon, LMS, UPnP/OpenHome, and HQPlayer to one control surface —
+  web UI, hardware knobs, and Claude/MCP.
+url: "https://github.com/open-horizon-labs/unified-hifi-control"
+arch:
+  - amd64
+  - aarch64
+init: false
+
+# Starts alongside other network-dependent add-ons/services rather than
+# in the earlier "system" stage.
+startup: services
+
+# Roon SOOD discovery and mDNS (LMS/UPnP/OpenHome/Chromecast) rely on
+# broadcast/multicast traffic on the LAN segment. Bridge networking hides
+# the container behind Docker NAT and breaks discovery, so the add-on
+# needs the host's network namespace directly. No `ports`/`ports_description`
+# mapping is declared because host_network makes the container bind port
+# 8088 straight to the host — Supervisor port mapping does not apply.
+host_network: true
+
+# No extra `map` entries: the add-on only needs its own private /data
+# directory (always mounted by the Supervisor), which is where
+# UHC_CONFIG_DIR persists settings and provider pairings — see Dockerfile.
+
+options:
+  port: 8088
+  log_level: info
+  require_controller_auth: false
+
+schema:
+  port: port
+  log_level: list(trace|debug|info|warn|error)
+  require_controller_auth: bool

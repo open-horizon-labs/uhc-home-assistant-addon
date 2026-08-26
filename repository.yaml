@@ -1,0 +1,4 @@
+# https://developers.home-assistant.io/docs/add-ons/repository#repository-configuration
+name: Unified Hi-Fi Control
+url: "https://github.com/open-horizon-labs/uhc-home-assistant-addon"
+maintainer: Muness Castle <munesscastle@artium.ai>
