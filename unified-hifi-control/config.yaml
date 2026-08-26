@@ -23,9 +23,29 @@ startup: services
 # 8088 straight to the host — Supervisor port mapping does not apply.
 host_network: true
 
-# No extra `map` entries: the add-on only needs its own private /data
-# directory (always mounted by the Supervisor), which is where
-# UHC_CONFIG_DIR persists settings and provider pairings — see Dockerfile.
+# The add-on's own private /data directory is always mounted by the
+# Supervisor and is where UHC_CONFIG_DIR persists settings and provider
+# pairings — see Dockerfile.
+#
+# `homeassistant_config` (#613) mounts Home Assistant's own configuration
+# directory at /homeassistant. An add-on cannot register entities — only an
+# integration running inside Home Assistant core can — but it can put that
+# integration where core will find it. run.sh copies
+# custom_components/unified_hifi_control (baked into the UHC image this
+# add-on is built FROM) into /homeassistant/custom_components on start, so
+# installing the add-on and restarting Home Assistant once is the whole
+# setup: no HACS, no copying files over Samba, no MQTT broker.
+#
+# Write access is what the copy needs; there is nothing else in Home
+# Assistant's config directory this add-on reads or touches. If the mount is
+# missing or read-only, run.sh logs one line and UHC starts anyway.
+#
+# This is the modern object form of `map` (Supervisor 2023.x+); the older
+# `homeassistant_config:rw` string form still parses but is not what the
+# current docs specify.
+map:
+  - type: homeassistant_config
+    read_only: false
 
 # Tier 2 (#581): embed the UHC web UI inside the Home Assistant dashboard.
 # The Supervisor's ingress proxy connects to the add-on (host network) on
@@ -40,7 +60,14 @@ ingress_port: 8088
 panel_icon: mdi:music-box-multiple
 panel_title: Hi-Fi Control
 
-# MQTT auto-configuration (#605). "want" (rather than "need") means the
+# MQTT broker hand-off (#605, re-scoped by #613). MQTT is no longer how this
+# add-on gets zones into Home Assistant — the integration installed above is
+# — so the Supervisor's broker details are now only *filled in* for the user.
+# UHC leaves the publisher switched off under the add-on until someone turns
+# it on deliberately. Existing installs that already had it running keep
+# running; see DOCS.md.
+#
+# "want" (rather than "need") means the
 # Supervisor hands over the broker's host/port/credentials when an MQTT
 # broker add-on such as Mosquitto is installed, but the add-on still
 # installs and starts normally when one is not — UHC's web UI, knobs, and
@@ -71,10 +98,12 @@ options:
   port: 8088
   log_level: info
   require_controller_auth: false
+  install_integration: true
   publish_to_home_assistant: true
 
 schema:
   port: port
   log_level: list(trace|debug|info|warn|error)
   require_controller_auth: bool
+  install_integration: bool
   publish_to_home_assistant: bool

@@ -13,9 +13,10 @@ reachable two ways, and both work at the same time:
   useful for other devices on the LAN, hardware knobs, and MCP clients
   that don't go through Home Assistant.
 
-Your zones and controllers also appear as Home Assistant **entities**
-automatically, as long as you have the **Mosquitto broker** add-on
-installed. See [Home Assistant entities](#home-assistant-entities) below.
+Your zones also become Home Assistant **media player** entities. The add-on
+installs the Unified Hi-Fi Control integration for you; you restart Home
+Assistant once and it appears. No broker, no HACS, no copying files. See
+[Home Assistant entities](#home-assistant-entities) below.
 
 ## Install
 
@@ -64,66 +65,94 @@ back — direct mode keeps working on the new port.
 
 ## Home Assistant entities
 
-Each of your zones shows up as a `media_player` entity and each hardware
-controller as its own device — no YAML, nothing to type into Unified Hi-Fi
-Control. Two things have to be in place, and only the first is automatic:
+Each of your zones becomes a `media_player` entity you can play, pause,
+seek, group, and set the volume on.
 
-1. **The Mosquitto broker add-on**, installed and started. Home Assistant's
-   Supervisor then hands this add-on the broker's address and a set of
-   credentials of its own, and the add-on passes them straight to Unified
-   Hi-Fi Control on start.
-2. **Home Assistant's own MQTT integration**, which you add yourself:
-   **Settings → Devices & services → Add integration → MQTT**. When the
-   Mosquitto add-on is installed this normally fills the broker details in
-   for you, so it is a couple of clicks.
+**What you do: restart Home Assistant once.**
 
-Step 2 is easy to miss, and missing it looks exactly like nothing being
-wrong. Unified Hi-Fi Control will happily connect to the broker and publish
-every zone, and Home Assistant will show **no entities at all**, because
-without that integration nothing on the Home Assistant side is reading the
-broker. It is not offered under "Discovered" — you have to add it.
+That is the whole setup. When the add-on starts, it copies the Unified
+Hi-Fi Control integration into `/config/custom_components` for you. Home
+Assistant only loads new integrations at startup, so it needs one restart
+(**Settings → System → Restart**). After that, UHC is waiting for you under
+**Settings → Devices & services → Discovered** — click **Configure** and
+you are done. It finds the add-on on your network by itself; there is
+nothing to type.
 
-Nothing needs restarting after you add it. Unified Hi-Fi Control notices
-Home Assistant arriving on the broker and re-sends everything within a few
-seconds.
+No MQTT broker is involved. No HACS. No copying files over Samba.
 
-**If no entities appear:**
+**If UHC does not appear under Discovered:**
 
-1. Check **Settings → Devices & services → MQTT**. If it says "No entries",
-   that is your answer — add the integration as described above.
-2. Install the **Mosquitto broker** add-on (Settings → Add-ons → Add-on
-   Store → Mosquitto broker) and start it, if you have not already.
-3. Open Unified Hi-Fi Control's **Settings → MQTT / Home Assistant**. It
-   says which of the two halves is missing, in plain words.
-4. Check the add-on's **Log** tab. One of these lines tells you where you
+1. Make sure you restarted **Home Assistant** itself, not just the add-on.
+   Restarting the add-on is not enough.
+2. Open the add-on's **Log** tab. One of these lines tells you where you
    stand:
 
    | Log line | What it means |
    |---|---|
-   | `MQTT broker from the Supervisor: …` | The broker was found and handed over. |
-   | `no MQTT broker available from the Supervisor` | No broker add-on is installed, or it isn't started. |
-   | `MQTT configured from environment (Home Assistant add-on); publisher enabled` | UHC is publishing. |
-   | `Home Assistant's MQTT integration is NOT set up` | The broker side is fine; step 2 above is what is missing. |
-   | `Home Assistant's MQTT integration is set up; discovery is being consumed` | Both halves are in place. |
-   | `MQTT configured from your saved settings` | You entered broker details yourself; those are being used instead. |
+   | `installed the Unified Hi-Fi Control integration …` | Done — restart Home Assistant. |
+   | `updated the Unified Hi-Fi Control integration …` | Done — restart Home Assistant. |
+   | `… is already up to date` | Nothing to do; it is already there. |
+   | `install_integration is off` | You turned the option off. |
+   | `already exists and was not installed by this add-on` | You have your own copy (HACS, or copied by hand). The add-on will not touch it. |
+   | `has been edited since the add-on installed it` | Your edits are being preserved. Delete the folder if you want the add-on to manage it again. |
+   | `/homeassistant is read-only` / `is not mapped` | The add-on could not write to Home Assistant's config folder. UHC still runs; install the integration through HACS instead. |
+   | `this UHC image does not bundle the integration` | The add-on is pinned to a UHC version from before this feature. Update the add-on. |
 
-### Using your own broker instead
+3. Check **Settings → Devices & services → Integrations** — if UHC is
+   already configured there, it will not show under Discovered again.
 
-If you'd rather point Unified Hi-Fi Control at a broker of your own, enter
-it under **Settings → MQTT / Home Assistant** in the UHC UI. **Broker
-settings you save yourself always win**: from that point on the add-on
-stops handing over the Supervisor's broker, and updates or restarts will
-not overwrite what you entered.
+### Version rules
+
+The integration is baked into the UHC image the add-on runs, so the copy it
+installs always matches the UHC version you are running. On every start the
+add-on compares `manifest.json` versions and:
+
+- installs it when the folder is missing,
+- updates it when the bundled one is newer,
+- does nothing when they match,
+- **never** overwrites a newer copy, a copy it did not install itself (HACS
+  or a manual copy), or a copy you have edited.
+
+To hand the integration back to the add-on, delete
+`/config/custom_components/unified_hifi_control` and restart the add-on.
 
 ### Turning it off
 
-Set `publish_to_home_assistant` to `false` in the add-on's Configuration
-tab and restart. The add-on then stops handing over any broker details.
+Set `install_integration` to `false` in the add-on's Configuration tab and
+restart the add-on. Anything already installed stays where it is; the add-on
+simply stops managing it.
 
-Note this only stops the *hand-over*. If entities were already being
-published, a broker Unified Hi-Fi Control already saved stays saved — turn
-**Enable MQTT/Home Assistant** off in UHC's Settings to actually stop
-publishing.
+## MQTT (optional, and not needed for the above)
+
+Unified Hi-Fi Control can also publish zones over MQTT. With the integration
+above this is not something you need — it exists for setups that want it,
+and for people running UHC outside Home Assistant, where MQTT is the only
+route.
+
+**It is off by default under this add-on, and nothing is published until you
+turn it on.** What the add-on does do, when the **Mosquitto broker** add-on
+is installed, is fill the broker's address and password into UHC's
+**Settings → MQTT / Home Assistant** so turning it on is one click with
+nothing to type.
+
+If you turn it on, note that MQTT entities also need **Home Assistant's own
+MQTT integration** (**Settings → Devices & services → Add integration →
+MQTT**) — without it, UHC publishes into a broker nobody is reading. UHC's
+Settings page says so plainly when that happens.
+
+**Already using MQTT from an earlier version?** Nothing changes. UHC leaves
+a broker configuration it has already applied exactly as it is — if it was
+publishing before the update, it is still publishing after.
+
+**Your own broker:** enter it under **Settings → MQTT / Home Assistant** in
+the UHC UI. **Broker settings you save yourself always win** — the add-on
+stops handing over the Supervisor's broker, and updates or restarts never
+overwrite what you entered.
+
+**Stopping the hand-over entirely:** set `publish_to_home_assistant` to
+`false` and restart the add-on. That only stops the hand-over; a broker UHC
+already saved stays saved, so turn **Enable MQTT/Home Assistant** off in
+UHC's Settings to actually stop publishing.
 
 ## First-time setup: finding the bootstrap token
 
@@ -164,7 +193,8 @@ you re-pair.
 | `port` | HTTP port for the web UI/API. Change only if 8088 conflicts with another service (for example, HQPlayer, which also defaults to 8088). | `8088` |
 | `log_level` | Log verbosity: `trace`, `debug`, `info`, `warn`, `error`. | `info` |
 | `require_controller_auth` | When `true`, provider pairing/account actions require the bootstrap token instead of trusting any LAN client. | `false` |
-| `publish_to_home_assistant` | Hand the Supervisor's MQTT broker to Unified Hi-Fi Control on start, so zones and controllers appear as Home Assistant entities. Set to `false` to keep the add-on from touching UHC's MQTT settings. See [Home Assistant entities](#home-assistant-entities). | `true` |
+| `install_integration` | Install and keep up to date the Unified Hi-Fi Control integration in Home Assistant, so your zones become media players. Set to `false` to manage it yourself. See [Home Assistant entities](#home-assistant-entities). | `true` |
+| `publish_to_home_assistant` | Fill the Supervisor's MQTT broker details into UHC's Settings so MQTT publishing is one click away. Publishing stays off until you turn it on. Set to `false` to keep the add-on from touching UHC's MQTT settings. See [MQTT](#mqtt-optional-and-not-needed-for-the-above). | `true` |
 
 Changing an option requires a **Restart** of the add-on to take effect
 (Configuration tab → Save, then Info tab → Restart).
@@ -195,7 +225,8 @@ should see a new extension advertising itself once you open the web UI
   browse to the new port.
 - **No entities in Home Assistant**: see
   [Home Assistant entities](#home-assistant-entities) — the usual cause is
-  that no MQTT broker add-on is installed.
+  that Home Assistant has not been restarted since the add-on installed the
+  integration.
 - **Lost the bootstrap token**: restart the add-on from the Info tab; a
   fresh token is written to the log on the next start.
 - **Add-on won't build/install**: check the Supervisor's own log

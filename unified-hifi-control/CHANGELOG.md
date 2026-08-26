@@ -2,6 +2,25 @@
 
 ## Unreleased
 
+- **Your zones are Home Assistant media players now — no broker, no HACS,
+  no copying files.** The add-on installs the Unified Hi-Fi Control
+  integration into Home Assistant itself. Restart Home Assistant once after
+  installing the add-on and UHC is waiting under **Settings → Devices &
+  services → Discovered**; click Configure and you are done. The add-on log
+  says exactly what it did and reminds you about the restart.
+- It keeps the integration up to date on every start, and never overwrites a
+  newer copy, a copy you installed yourself through HACS, or one you have
+  edited. `install_integration: false` turns the whole thing off.
+- **MQTT is no longer switched on for you.** It was never needed for
+  entities, and publishing every zone to a broker nobody asked for is not a
+  sensible default. When the Mosquitto add-on is installed the broker
+  details are still filled in for you, so switching MQTT on stays one click
+  with nothing to type — it just does not happen by itself any more.
+- If you already had MQTT running, it keeps running. Nothing is torn down.
+- The "publishing, but Home Assistant isn't receiving it" warning now only
+  appears if you turned MQTT on yourself. It was never fair to warn people
+  about a setting they did not choose.
+
 - **Says when Home Assistant isn't listening.** Installing this add-on with
   the Mosquitto broker builds only half the bridge: Home Assistant's own
   **MQTT integration** still has to be added by hand, and until it is, you

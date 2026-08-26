@@ -17,11 +17,22 @@ configuration:
       one-time controller bootstrap token (shown in this add-on's log on
       first start) instead of trusting any LAN client. Leave off for a
       typical single-household LAN setup.
-  publish_to_home_assistant:
-    name: Publish to Home Assistant
+  install_integration:
+    name: Install the Home Assistant integration
     description: >-
-      Show your zones and controllers as Home Assistant entities. Needs the
-      Mosquitto broker add-on installed; the broker's address and password
-      are then passed to Unified Hi-Fi Control for you. Broker settings you
-      enter yourself in UHC's Settings always take priority. Turn this off
-      to keep the add-on from touching UHC's MQTT settings at all.
+      Put the Unified Hi-Fi Control integration into Home Assistant so your
+      zones become media players. The add-on copies it into
+      `/config/custom_components` on start and keeps it up to date; restart
+      Home Assistant once afterwards and UHC appears under Settings →
+      Devices & services → Discovered. A copy you installed yourself (for
+      example through HACS), or one you have edited, is never overwritten.
+      Turn this off if you would rather manage the integration yourself.
+  publish_to_home_assistant:
+    name: Offer MQTT publishing
+    description: >-
+      Optional, and not needed for the integration above. When the Mosquitto
+      broker add-on is installed, this fills the broker's address and
+      password into UHC's Settings so you can switch MQTT publishing on with
+      one click if you want it — nothing is published until you do. Broker
+      settings you enter yourself always take priority. Turn this off to keep
+      the add-on from touching UHC's MQTT settings at all.

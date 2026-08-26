@@ -19,6 +19,11 @@ Assistant dashboard. See [DOCS.md](DOCS.md) for the full install
 walkthrough, including where to find your one-time controller bootstrap
 token.
 
+It also installs the Unified Hi-Fi Control **integration** into Home
+Assistant for you, so your zones become `media_player` entities. Restart
+Home Assistant once after installing the add-on and UHC appears under
+**Settings → Devices & services → Discovered**. No MQTT broker, no HACS.
+
 ## Installation
 
 See the full walkthrough in [DOCS.md](DOCS.md). Short version: add
