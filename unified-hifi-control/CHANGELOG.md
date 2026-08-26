@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 3.7.0-alpha.3
 
 - **Zones and controllers now appear as Home Assistant entities on their
   own.** With the Mosquitto broker add-on installed, the Supervisor hands
