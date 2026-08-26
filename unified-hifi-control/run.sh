@@ -25,5 +25,12 @@ if [ "$REQUIRE_CONTROLLER_AUTH" = "true" ]; then
     export UHC_REQUIRE_CONTROLLER_AUTH=1
 fi
 
+# Ingress (Tier 2, #581): tell UHC it may honor Supervisor-proxied ingress
+# requests. This is gate 1 of 3 — UHC additionally requires the TCP peer to
+# be on the Supervisor's proxy network (172.30.32.0/23) and a well-formed
+# X-Ingress-Path header before it treats a request as ingress, so setting
+# this here does not weaken the direct-port posture.
+export UHC_INGRESS=1
+
 # UHC_CONFIG_DIR is already set to /data via the Dockerfile ENV.
 exec /app/unified-hifi-control

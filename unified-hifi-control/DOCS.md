@@ -2,10 +2,18 @@
 
 Runs the [Unified Hi-Fi Control](https://github.com/open-horizon-labs/unified-hifi-control)
 bridge (Roon, LMS, UPnP/OpenHome, HQPlayer) as a Supervisor-managed
-container on your Home Assistant box, with its own web UI. This is the
-Tier 1 ("no ingress") add-on: the UI opens in its own browser tab at
-`http://<your-ha-host>:8088`, not embedded inside the Home Assistant
-dashboard. If you also want the media-player / sensor entities inside HA,
+container on your Home Assistant box, with its own web UI. The UI is
+reachable two ways, and both work at the same time:
+
+- **Ingress (embedded)**: a **Hi-Fi Control** entry appears in the HA
+  sidebar and opens the full UHC UI inside the Home Assistant dashboard,
+  authenticated by your HA session — no extra port, no bootstrap prompt.
+- **Direct (fallback)**: the UI also stays available in its own browser
+  tab at `http://<your-ha-host>:8088`, exactly as in the Tier 1 add-on —
+  useful for other devices on the LAN, hardware knobs, and MCP clients
+  that don't go through Home Assistant.
+
+If you also want the media-player / sensor entities inside HA,
 install the [UHC HACS integration](https://github.com/open-horizon-labs/unified-hifi-control)
 separately — this add-on and the integration are complementary.
 
@@ -26,25 +34,40 @@ separately — this add-on and the integration are complementary.
    a few minutes.
 6. Once installed, click **Start**.
 
-## Why "no ingress"?
+## Ingress vs. direct mode
 
 This add-on runs with `host_network: true` — the container shares your HA
 host's network stack directly instead of Docker's isolated bridge network.
-That's required because:
+That's required because **Roon** discovery (SOOD) and
+**LMS/UPnP/OpenHome/Chromecast** discovery (mDNS/SSDP) rely on broadcast
+and multicast packets that don't cross Docker's NAT boundary.
 
-- **Roon** discovery (SOOD) and **LMS/UPnP/OpenHome/Chromecast** discovery
-  (mDNS/SSDP) rely on broadcast and multicast packets that don't cross
-  Docker's NAT boundary.
-- Without host networking, the add-on would start but never see any zones
-  or devices on your LAN.
+**Ingress** (the embedded **Hi-Fi Control** sidebar panel) proxies your
+browser through the Supervisor to the add-on's port. Inside ingress:
 
-Home Assistant's **Ingress** feature (embedding the UI inside the HA
-dashboard, single sign-on) is not available for host-network add-ons in
-this release. You reach the UI directly, at your HA host's IP or hostname
-on port 8088. (Tier 2 — ingress support — is tracked separately in the
-main repo and depends on this add-on shipping first.)
+- Your Home Assistant login is the authentication — UHC trusts requests
+  proxied by the Supervisor and never shows the bootstrap prompt there.
+- No port needs to be reachable from the browser's network; remote access
+  solutions that expose HA (Nabu Casa, VPN) get the UHC UI for free.
+
+**Direct mode** (`http://<your-ha-host>:8088`) keeps working unchanged as
+a fallback and for non-browser clients (hardware knobs, MCP agents, the
+HACS integration). Direct requests keep the full controller-auth posture:
+the ingress trust applies only to connections arriving from the
+Supervisor's own proxy network carrying its `X-Ingress-Path` header, so a
+LAN client cannot impersonate ingress by setting headers.
+
+**Caveat**: ingress connects to port `8088` specifically (`ingress_port`
+is fixed; this add-on has no bashio to discover a dynamic port). If you
+change the `port` option, the sidebar panel stops working until you set it
+back — direct mode keeps working on the new port.
 
 ## First-time setup: finding the bootstrap token
+
+**If you only use the embedded sidebar panel, you can skip this section**
+— inside ingress your HA session is the authentication and the bootstrap
+prompt never appears. The token matters for direct mode
+(`http://<your-ha-host>:8088`).
 
 On first start, the bridge generates a one-time **controller bootstrap
 token** used to claim ownership of the web UI (so a random device on your
