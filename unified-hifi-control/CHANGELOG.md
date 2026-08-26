@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.7.0-alpha.4
+
+- **Honest broker status.** The MQTT section now shows whether Unified Hi-Fi
+  Control is actually connected to your broker, not just that it is trying. A
+  broker that never answers reads as a problem, with the address and the
+  reason (wrong name, nothing listening, or bad username/password) instead of
+  a green "Publishing".
+
 ## 3.7.0-alpha.3
 
 - **Zones and controllers now appear as Home Assistant entities on their
