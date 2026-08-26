@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Unified Hi-Fi Control
-version: "3.7.0-alpha.5"
+version: "3.7.0-alpha.6"
 slug: unified_hifi_control
 description: >-
   Bridge Roon, LMS, UPnP/OpenHome, and HQPlayer to one control surface —

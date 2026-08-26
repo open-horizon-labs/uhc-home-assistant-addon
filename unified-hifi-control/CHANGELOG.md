@@ -18,6 +18,16 @@
   arriving on the broker and re-sends every zone within a few seconds.
 - DOCS: the MQTT integration is now step 2 of the setup rather than a footnote.
 
+## 3.7.0-alpha.6
+
+- **Tells you when Home Assistant isn't listening.** Publishing to a broker
+  that nothing consumes used to look like success. The MQTT section now says
+  plainly whether Home Assistant's own MQTT integration is set up, and how to
+  add it — and when you do, your zones appear within seconds without a
+  restart.
+- Fixed album art showing as a broken image in the embedded panel on the
+  Zones, HQPlayer and Spotify pages and in the zone picker.
+
 ## 3.7.0-alpha.5
 
 - **The embedded panel actually loads now.** alpha.4's attempt to fix it made
