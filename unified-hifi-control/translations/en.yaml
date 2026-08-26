@@ -17,3 +17,11 @@ configuration:
       one-time controller bootstrap token (shown in this add-on's log on
       first start) instead of trusting any LAN client. Leave off for a
       typical single-household LAN setup.
+  publish_to_home_assistant:
+    name: Publish to Home Assistant
+    description: >-
+      Show your zones and controllers as Home Assistant entities. Needs the
+      Mosquitto broker add-on installed; the broker's address and password
+      are then passed to Unified Hi-Fi Control for you. Broker settings you
+      enter yourself in UHC's Settings always take priority. Turn this off
+      to keep the add-on from touching UHC's MQTT settings at all.

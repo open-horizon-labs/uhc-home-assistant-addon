@@ -1,5 +1,18 @@
 # Changelog
 
+## Unreleased
+
+- **Zones and controllers now appear as Home Assistant entities on their
+  own.** With the Mosquitto broker add-on installed, the Supervisor hands
+  this add-on the broker's address and credentials, and Unified Hi-Fi
+  Control starts publishing over MQTT discovery — no broker details to
+  type in, no YAML. Previously the add-on gave you the UI panel and no
+  entities, with nothing explaining why.
+- Broker settings you enter yourself in UHC's Settings always win, and are
+  never overwritten by the add-on.
+- New `publish_to_home_assistant` option (default `true`) to opt out.
+- The add-on log now says which broker was used, or why none was.
+
 ## 3.7.0-alpha.2
 
 - **Fixes the embedded panel.** In alpha.1 the panel loaded its shell but never
