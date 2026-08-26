@@ -13,9 +13,9 @@ reachable two ways, and both work at the same time:
   useful for other devices on the LAN, hardware knobs, and MCP clients
   that don't go through Home Assistant.
 
-If you also want the media-player / sensor entities inside HA,
-install the [UHC HACS integration](https://github.com/open-horizon-labs/unified-hifi-control)
-separately — this add-on and the integration are complementary.
+Your zones and controllers also appear as Home Assistant **entities**
+automatically, as long as you have the **Mosquitto broker** add-on
+installed. See [Home Assistant entities](#home-assistant-entities) below.
 
 ## Install
 
@@ -62,6 +62,54 @@ is fixed; this add-on has no bashio to discover a dynamic port). If you
 change the `port` option, the sidebar panel stops working until you set it
 back — direct mode keeps working on the new port.
 
+## Home Assistant entities
+
+With the **Mosquitto broker** add-on installed, each of your zones shows up
+as a `media_player` entity and each hardware controller as its own device —
+no setup, no YAML, nothing to type into Unified Hi-Fi Control.
+
+That works because Home Assistant's Supervisor hands this add-on the
+broker's address and a set of credentials of its own, and the add-on passes
+them straight to Unified Hi-Fi Control on start. UHC then publishes its
+zones over MQTT discovery, which is the mechanism Home Assistant already
+uses to pick up MQTT devices by itself.
+
+**If no entities appear:**
+
+1. Install the **Mosquitto broker** add-on (Settings → Add-ons → Add-on
+   Store → Mosquitto broker) and start it.
+2. Restart Unified Hi-Fi Control.
+3. Check the add-on's **Log** tab. One of these lines tells you where you
+   stand:
+
+   | Log line | What it means |
+   |---|---|
+   | `MQTT broker from the Supervisor: …` | The broker was found and handed over. |
+   | `no MQTT broker available from the Supervisor` | No broker add-on is installed, or it isn't started. |
+   | `MQTT configured from environment (Home Assistant add-on); publisher enabled` | Entities are being published. |
+   | `MQTT configured from your saved settings` | You entered broker details yourself; those are being used instead. |
+
+Home Assistant's own MQTT integration must be set up and pointed at the
+same broker — installing Mosquitto normally prompts you to do this.
+
+### Using your own broker instead
+
+If you'd rather point Unified Hi-Fi Control at a broker of your own, enter
+it under **Settings → MQTT / Home Assistant** in the UHC UI. **Broker
+settings you save yourself always win**: from that point on the add-on
+stops handing over the Supervisor's broker, and updates or restarts will
+not overwrite what you entered.
+
+### Turning it off
+
+Set `publish_to_home_assistant` to `false` in the add-on's Configuration
+tab and restart. The add-on then stops handing over any broker details.
+
+Note this only stops the *hand-over*. If entities were already being
+published, a broker Unified Hi-Fi Control already saved stays saved — turn
+**Enable MQTT/Home Assistant** off in UHC's Settings to actually stop
+publishing.
+
 ## First-time setup: finding the bootstrap token
 
 **If you only use the embedded sidebar panel, you can skip this section**
@@ -101,6 +149,7 @@ you re-pair.
 | `port` | HTTP port for the web UI/API. Change only if 8088 conflicts with another service (for example, HQPlayer, which also defaults to 8088). | `8088` |
 | `log_level` | Log verbosity: `trace`, `debug`, `info`, `warn`, `error`. | `info` |
 | `require_controller_auth` | When `true`, provider pairing/account actions require the bootstrap token instead of trusting any LAN client. | `false` |
+| `publish_to_home_assistant` | Hand the Supervisor's MQTT broker to Unified Hi-Fi Control on start, so zones and controllers appear as Home Assistant entities. Set to `false` to keep the add-on from touching UHC's MQTT settings. See [Home Assistant entities](#home-assistant-entities). | `true` |
 
 Changing an option requires a **Restart** of the add-on to take effect
 (Configuration tab → Save, then Info tab → Restart).
@@ -129,6 +178,9 @@ should see a new extension advertising itself once you open the web UI
 - **Port 8088 already in use**: if HQPlayer or another service on the same
   host also uses 8088, change the `port` option, restart the add-on, and
   browse to the new port.
+- **No entities in Home Assistant**: see
+  [Home Assistant entities](#home-assistant-entities) — the usual cause is
+  that no MQTT broker add-on is installed.
 - **Lost the bootstrap token**: restart the add-on from the Info tab; a
   fresh token is written to the log on the next start.
 - **Add-on won't build/install**: check the Supervisor's own log

@@ -33,9 +33,13 @@ LABEL \
     org.opencontainers.image.version=${BUILD_VERSION} \
     org.opencontainers.image.licenses="PolyForm-Noncommercial-1.0.0"
 
-# jq reads the Supervisor-managed /data/options.json; the base image
-# (Alpine) doesn't ship it.
-RUN apk add --no-cache jq
+# jq reads the Supervisor-managed /data/options.json and the Supervisor's
+# MQTT service JSON; curl makes the Supervisor API call for it (#605). The
+# base image is Alpine with only ca-certificates added, so neither is
+# present. BusyBox wget could stand in for curl, but not for `--fail`, which
+# is what makes "no broker installed" a clean non-zero rather than an error
+# page parsed as configuration.
+RUN apk add --no-cache jq curl
 
 # UHC_CONFIG_DIR=/data makes settings, provider pairings, and Roon
 # extension state persist in the add-on's private, Supervisor-managed

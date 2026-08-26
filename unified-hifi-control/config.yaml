@@ -40,12 +40,23 @@ ingress_port: 8088
 panel_icon: mdi:music-box-multiple
 panel_title: Hi-Fi Control
 
+# MQTT auto-configuration (#605). "want" (rather than "need") means the
+# Supervisor hands over the broker's host/port/credentials when an MQTT
+# broker add-on such as Mosquitto is installed, but the add-on still
+# installs and starts normally when one is not — UHC's web UI, knobs, and
+# MCP surface do not depend on MQTT. run.sh reads the service over the
+# Supervisor API and exports it as UHC_MQTT_*; see DOCS.md.
+services:
+  - mqtt:want
+
 options:
   port: 8088
   log_level: info
   require_controller_auth: false
+  publish_to_home_assistant: true
 
 schema:
   port: port
   log_level: list(trace|debug|info|warn|error)
   require_controller_auth: bool
+  publish_to_home_assistant: bool
