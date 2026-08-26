@@ -49,6 +49,24 @@ panel_title: Hi-Fi Control
 services:
   - mqtt:want
 
+# Read-only access to Home Assistant's own REST API through the Supervisor
+# proxy (#610), so the add-on can answer one question it otherwise cannot:
+# is Home Assistant's MQTT integration actually set up?
+#
+# Handing UHC the broker (above) only builds half the bridge. The other half
+# - adding the MQTT integration in Home Assistant - is a manual step, and
+# skipping it is invisible from the broker side: UHC connects, publishes
+# every zone, and Home Assistant shows nothing at all. With this flag UHC
+# can GET http://supervisor/core/api/config with SUPERVISOR_TOKEN and check
+# whether "mqtt" is among the loaded components, then say so in Settings
+# instead of reporting a success nobody is receiving.
+#
+# `homeassistant_api` (not `hassio_api`) is the flag for the core API proxy.
+# Without it the request comes back 401 and UHC reports "can't tell" rather
+# than guessing - so this is the difference between a useful answer and an
+# honest shrug, never between a warning and a false alarm.
+homeassistant_api: true
+
 options:
   port: 8088
   log_level: info
