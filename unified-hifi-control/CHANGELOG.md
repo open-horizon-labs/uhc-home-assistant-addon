@@ -13,6 +13,13 @@
 - New `publish_to_home_assistant` option (default `true`) to opt out.
 - The add-on log now says which broker was used, or why none was.
 
+## 3.7.0-alpha.2
+
+- **Fixes the embedded panel.** In alpha.1 the panel loaded its shell but never
+  came alive — no zones, no music sources, and no error explaining why. The web
+  app's WebAssembly bundle was requested from the wrong address behind the
+  Ingress proxy and quietly failed to load. It now loads correctly.
+
 ## 3.7.0-alpha.1
 
 - **Embedded dashboard panel (Ingress).** Open Unified Hi-Fi Control directly
