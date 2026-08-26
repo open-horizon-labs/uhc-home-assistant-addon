@@ -7,8 +7,10 @@ surface (web UI, hardware knobs, Claude/MCP).
 
 ## Add this repository
 
-In Home Assistant: **Settings → Add-ons → Add-on Store → ⋮ (top right) →
-Repositories**, then add:
+[![Add add-on repository to my Home Assistant](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fopen-horizon-labs%2Fuhc-home-assistant-addon)
+
+Or manually, in Home Assistant: **Settings → Add-ons → Add-on Store →
+⋮ (top right) → Repositories**, then add:
 
 ```
 https://github.com/open-horizon-labs/uhc-home-assistant-addon
