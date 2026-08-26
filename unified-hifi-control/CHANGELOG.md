@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.7.0-alpha.5
+
+- **The embedded panel actually loads now.** alpha.4's attempt to fix it made
+  things worse: the panel's program file was corrupted in transit and Home
+  Assistant returned "502: Bad Gateway" instead of the app. Fixed, and covered
+  by a test so it cannot regress silently again.
+
 ## 3.7.0-alpha.4
 
 - **Honest broker status.** The MQTT section now shows whether Unified Hi-Fi
