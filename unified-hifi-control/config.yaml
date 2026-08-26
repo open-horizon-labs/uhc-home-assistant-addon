@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Unified Hi-Fi Control
-version: "3.6.0"
+version: "3.7.0"
 slug: unified_hifi_control
 description: >-
   Bridge Roon, LMS, UPnP/OpenHome, and HQPlayer to one control surface —
@@ -26,6 +26,19 @@ host_network: true
 # No extra `map` entries: the add-on only needs its own private /data
 # directory (always mounted by the Supervisor), which is where
 # UHC_CONFIG_DIR persists settings and provider pairings — see Dockerfile.
+
+# Tier 2 (#581): embed the UHC web UI inside the Home Assistant dashboard.
+# The Supervisor's ingress proxy connects to the add-on (host network) on
+# ingress_port and forwards requests with an X-Ingress-Path header; UHC
+# rewrites its HTML/URLs for that prefix when run.sh sets UHC_INGRESS=1.
+# ingress_port is a fixed value because this add-on has no bashio to
+# discover a dynamic port — it must match the `port` option (default 8088).
+# Changing `port` therefore breaks the embedded panel (direct mode keeps
+# working); see DOCS.md.
+ingress: true
+ingress_port: 8088
+panel_icon: mdi:music-box-multiple
+panel_title: Hi-Fi Control
 
 options:
   port: 8088
