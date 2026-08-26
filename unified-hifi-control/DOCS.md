@@ -64,33 +64,48 @@ back — direct mode keeps working on the new port.
 
 ## Home Assistant entities
 
-With the **Mosquitto broker** add-on installed, each of your zones shows up
-as a `media_player` entity and each hardware controller as its own device —
-no setup, no YAML, nothing to type into Unified Hi-Fi Control.
+Each of your zones shows up as a `media_player` entity and each hardware
+controller as its own device — no YAML, nothing to type into Unified Hi-Fi
+Control. Two things have to be in place, and only the first is automatic:
 
-That works because Home Assistant's Supervisor hands this add-on the
-broker's address and a set of credentials of its own, and the add-on passes
-them straight to Unified Hi-Fi Control on start. UHC then publishes its
-zones over MQTT discovery, which is the mechanism Home Assistant already
-uses to pick up MQTT devices by itself.
+1. **The Mosquitto broker add-on**, installed and started. Home Assistant's
+   Supervisor then hands this add-on the broker's address and a set of
+   credentials of its own, and the add-on passes them straight to Unified
+   Hi-Fi Control on start.
+2. **Home Assistant's own MQTT integration**, which you add yourself:
+   **Settings → Devices & services → Add integration → MQTT**. When the
+   Mosquitto add-on is installed this normally fills the broker details in
+   for you, so it is a couple of clicks.
+
+Step 2 is easy to miss, and missing it looks exactly like nothing being
+wrong. Unified Hi-Fi Control will happily connect to the broker and publish
+every zone, and Home Assistant will show **no entities at all**, because
+without that integration nothing on the Home Assistant side is reading the
+broker. It is not offered under "Discovered" — you have to add it.
+
+Nothing needs restarting after you add it. Unified Hi-Fi Control notices
+Home Assistant arriving on the broker and re-sends everything within a few
+seconds.
 
 **If no entities appear:**
 
-1. Install the **Mosquitto broker** add-on (Settings → Add-ons → Add-on
-   Store → Mosquitto broker) and start it.
-2. Restart Unified Hi-Fi Control.
-3. Check the add-on's **Log** tab. One of these lines tells you where you
+1. Check **Settings → Devices & services → MQTT**. If it says "No entries",
+   that is your answer — add the integration as described above.
+2. Install the **Mosquitto broker** add-on (Settings → Add-ons → Add-on
+   Store → Mosquitto broker) and start it, if you have not already.
+3. Open Unified Hi-Fi Control's **Settings → MQTT / Home Assistant**. It
+   says which of the two halves is missing, in plain words.
+4. Check the add-on's **Log** tab. One of these lines tells you where you
    stand:
 
    | Log line | What it means |
    |---|---|
    | `MQTT broker from the Supervisor: …` | The broker was found and handed over. |
    | `no MQTT broker available from the Supervisor` | No broker add-on is installed, or it isn't started. |
-   | `MQTT configured from environment (Home Assistant add-on); publisher enabled` | Entities are being published. |
+   | `MQTT configured from environment (Home Assistant add-on); publisher enabled` | UHC is publishing. |
+   | `Home Assistant's MQTT integration is NOT set up` | The broker side is fine; step 2 above is what is missing. |
+   | `Home Assistant's MQTT integration is set up; discovery is being consumed` | Both halves are in place. |
    | `MQTT configured from your saved settings` | You entered broker details yourself; those are being used instead. |
-
-Home Assistant's own MQTT integration must be set up and pointed at the
-same broker — installing Mosquitto normally prompts you to do this.
 
 ### Using your own broker instead
 

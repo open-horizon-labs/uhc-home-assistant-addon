@@ -1,5 +1,23 @@
 # Changelog
 
+## Unreleased
+
+- **Says when Home Assistant isn't listening.** Installing this add-on with
+  the Mosquitto broker builds only half the bridge: Home Assistant's own
+  **MQTT integration** still has to be added by hand, and until it is, you
+  get no entities at all — even though Unified Hi-Fi Control is connected to
+  the broker and publishing every zone. Nothing said so; the MQTT status read
+  as a clean success. UHC now checks with Home Assistant directly and, when
+  the integration is missing, says so in **Settings → MQTT / Home Assistant**
+  with the click path: **Settings → Devices & services → Add integration →
+  MQTT**. With the Mosquitto add-on installed it normally fills the broker in
+  for you.
+- When it genuinely cannot check — running outside Home Assistant, for
+  instance — it says that too, rather than guessing either way.
+- Nothing to restart after adding the integration: UHC notices Home Assistant
+  arriving on the broker and re-sends every zone within a few seconds.
+- DOCS: the MQTT integration is now step 2 of the setup rather than a footnote.
+
 ## 3.7.0-alpha.5
 
 - **The embedded panel actually loads now.** alpha.4's attempt to fix it made
