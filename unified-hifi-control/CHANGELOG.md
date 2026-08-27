@@ -37,6 +37,14 @@
   arriving on the broker and re-sends every zone within a few seconds.
 - DOCS: the MQTT integration is now step 2 of the setup rather than a footnote.
 
+## 3.7.0-alpha.9
+
+- **Playing something you browsed to a while ago now just works.** Roon
+  invalidates the handles it gives us for items, and playback would fail with
+  "the item key is no longer valid — search or browse again". It now quietly
+  retraces your path, gets a fresh handle and plays, instead of asking you to
+  start over.
+
 ## 3.7.0-alpha.8
 
 - **Home Assistant now tells you to restart.** Installing the integration
