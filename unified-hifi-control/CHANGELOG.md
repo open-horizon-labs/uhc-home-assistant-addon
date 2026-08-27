@@ -37,6 +37,13 @@
   arriving on the broker and re-sends every zone within a few seconds.
 - DOCS: the MQTT integration is now step 2 of the setup rather than a footnote.
 
+## 3.7.0-alpha.10
+
+- **Spotify setup works again.** Connecting Spotify needs a secure address
+  for its sign-in to return to, and the tool that creates one was missing
+  from the app's container — so setup stopped with "ssh was not found on this
+  system", which you had no way to fix. It ships in the image now.
+
 ## 3.7.0-alpha.9
 
 - **Playing something you browsed to a while ago now just works.** Roon
