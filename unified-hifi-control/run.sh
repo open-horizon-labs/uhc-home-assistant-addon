@@ -244,13 +244,71 @@ install_integration() {
     return 0
 }
 
+# Home Assistant only loads custom integrations at startup, so a freshly
+# installed one is invisible until a restart. The add-on log is the wrong
+# place to say so -- nobody reads an add-on log to discover a pending step --
+# so raise a notification inside Home Assistant itself, the way the rest of
+# HA surfaces "action needed". Fixed notification_id so repeated starts
+# replace the notice instead of stacking copies.
+NOTIFICATION_ID=unified_hifi_control_restart_required
+
+# Every call here is best-effort: no token, no core API, an HTTP failure or a
+# slow response must never delay or fail the add-on. Hence `|| true` and a
+# short timeout on each.
+ha_api() {
+    _method="$1"
+    _path="$2"
+    _body="${3:-}"
+    [ -n "${SUPERVISOR_TOKEN:-}" ] || return 1
+    if [ -n "$_body" ]; then
+        curl -sSL --fail --max-time 10 -X "$_method" \
+            -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d "$_body" \
+            "http://supervisor/core/api/${_path}" >/dev/null 2>&1
+    else
+        curl -sSL --fail --max-time 10 -X "$_method" \
+            -H "Authorization: Bearer ${SUPERVISOR_TOKEN}" \
+            "http://supervisor/core/api/${_path}" 2>/dev/null
+    fi
+}
+
 announce_restart() {
     echo "run.sh: RESTART HOME ASSISTANT ONCE to pick it up (Settings > System > Restart). After the restart, Unified Hi-Fi Control appears under Settings > Devices & services > Discovered." >&2
+
+    _message="Unified Hi-Fi Control installed its Home Assistant integration. **Restart Home Assistant once** to finish setting it up: Settings → System → Restart.
+
+After the restart it appears under Settings → Devices & services → Discovered, and your zones become media players you can control, group and browse.
+
+This notice clears itself once the restart is done."
+    _payload="$(jq -n --arg t "Unified Hi-Fi Control: restart to finish setup" \
+                      --arg m "$_message" \
+                      --arg i "$NOTIFICATION_ID" \
+                      '{title:$t, message:$m, notification_id:$i}' 2>/dev/null)" || return 0
+    if ha_api POST "services/persistent_notification/create" "$_payload"; then
+        echo "run.sh: raised a Home Assistant notification about the required restart." >&2
+    else
+        echo "run.sh: could not raise the restart notification in Home Assistant (see the line above for the step)." >&2
+    fi
+    return 0
+}
+
+# Once Home Assistant has actually loaded the integration, the restart has
+# happened and the notice is stale -- clear it rather than leaving the user
+# to dismiss a to-do they already did.
+clear_restart_notice() {
+    _config="$(ha_api GET "config")" || return 0
+    printf '%s' "$_config" \
+        | jq -e '.components // [] | index("unified_hifi_control")' >/dev/null 2>&1 || return 0
+    _payload="$(jq -n --arg i "$NOTIFICATION_ID" '{notification_id:$i}' 2>/dev/null)" || return 0
+    ha_api POST "services/persistent_notification/dismiss" "$_payload" || true
+    return 0
 }
 
 # `|| true` because a stray non-zero from anything inside must not take the
 # add-on down with it under `set -eu`.
 install_integration || true
+clear_restart_notice || true
 
 export UHC_HA_INTEGRATION_STATUS
 export UHC_HA_INTEGRATION_VERSION

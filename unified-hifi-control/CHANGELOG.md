@@ -37,6 +37,15 @@
   arriving on the broker and re-sends every zone within a few seconds.
 - DOCS: the MQTT integration is now step 2 of the setup rather than a footnote.
 
+## 3.7.0-alpha.8
+
+- **Home Assistant now tells you to restart.** Installing the integration
+  needs one Home Assistant restart to take effect, and that was only
+  mentioned in the add-on log. You now get a notification in Home Assistant
+  itself, and it clears on its own once the restart is done.
+- Corrected the README, which still claimed the add-on had no dashboard
+  embedding and did not install the integration.
+
 ## 3.7.0-alpha.7
 
 - **Your zones become Home Assistant devices, by themselves.** The app now
