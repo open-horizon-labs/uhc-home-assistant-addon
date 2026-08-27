@@ -37,6 +37,17 @@
   arriving on the broker and re-sends every zone within a few seconds.
 - DOCS: the MQTT integration is now step 2 of the setup rather than a footnote.
 
+## 3.7.0-alpha.7
+
+- **Your zones become Home Assistant devices, by themselves.** The app now
+  installs its own Home Assistant integration for you. Restart Home Assistant
+  once after updating, and Unified Hi-Fi Control appears under Discovered —
+  add it and every zone shows up as a media player you can control, group and
+  browse. No MQTT broker, no HACS, nothing to copy.
+- MQTT no longer switches itself on. It stays available for setups that want
+  it (broker details are still filled in for you), and anything already
+  publishing keeps working exactly as before.
+
 ## 3.7.0-alpha.6
 
 - **Tells you when Home Assistant isn't listening.** Publishing to a broker
