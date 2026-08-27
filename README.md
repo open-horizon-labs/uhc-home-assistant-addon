@@ -25,18 +25,26 @@ token on first start, is in
 
 | Add-on | Description |
 |---|---|
-| [`unified-hifi-control/`](unified-hifi-control/) | The bridge, packaged as a Supervisor-managed container. Requires host networking for Roon/mDNS discovery. Tier 1: UI opens in its own tab, no HA ingress/embedding yet. |
+| [`unified-hifi-control/`](unified-hifi-control/) | The bridge, packaged as a Supervisor-managed container. Requires host networking for Roon/mDNS discovery. Embeds in the HA dashboard via ingress, and installs the UHC integration so your zones become `media_player` entities. |
 
 ## Scope
 
-This is the **Tier 1** add-on: installable from the store, no ingress. UI
-embedding inside the HA dashboard (ingress, HA-session auth) is tracked as
-Tier 2 in the main repository and depends on this add-on shipping first.
+Installing this add-on gives you three things:
 
-For the entity-level integration (media players, sensors inside HA), see
-the [HACS integration](https://github.com/open-horizon-labs/unified-hifi-control)
-in the main repository — it is separate from, and complementary to, this
-add-on.
+- **The bridge itself**, running as a Supervisor-managed container.
+- **The UI in your dashboard**, through ingress — a **Hi-Fi Control**
+  sidebar entry authenticated by your Home Assistant session. The direct
+  tab at `http://<your-ha-host>:8088` keeps working for LAN devices,
+  hardware controllers, and MCP clients.
+- **Your zones as entities**: the add-on installs the Unified Hi-Fi
+  Control integration into Home Assistant for you. Restart Home Assistant
+  once and it appears under **Settings → Devices & services →
+  Discovered**. No MQTT broker, no HACS, nothing to copy.
+
+Running UHC somewhere other than Home Assistant (QNAP, Docker, bare
+metal)? Install the integration from the
+[main repository](https://github.com/open-horizon-labs/unified-hifi-control)
+instead — this add-on is only for Home Assistant hosts.
 
 ## Versioning
 

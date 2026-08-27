@@ -9,7 +9,7 @@ reachable two ways, and both work at the same time:
   sidebar and opens the full UHC UI inside the Home Assistant dashboard,
   authenticated by your HA session — no extra port, no bootstrap prompt.
 - **Direct (fallback)**: the UI also stays available in its own browser
-  tab at `http://<your-ha-host>:8088`, exactly as in the Tier 1 add-on —
+  tab at `http://<your-ha-host>:8088` —
   useful for other devices on the LAN, hardware knobs, and MCP clients
   that don't go through Home Assistant.
 
