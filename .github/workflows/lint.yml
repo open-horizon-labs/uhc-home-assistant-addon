@@ -10,6 +10,14 @@ on:
   workflow_dispatch:
 
 jobs:
+  version-pin:
+    name: Immutable UHC version pin
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check add-on and runtime versions
+        run: ./test/version_pin_test.sh
+
   addon-lint:
     name: Add-on config lint
     runs-on: ubuntu-latest

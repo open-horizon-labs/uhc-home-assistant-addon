@@ -50,8 +50,14 @@ instead — this add-on is only for Home Assistant hosts.
 
 The add-on's `config.yaml` `version` and the `build.yaml` base image tag
 track [unified-hifi-control releases](https://github.com/open-horizon-labs/unified-hifi-control/releases).
-See [`unified-hifi-control` repo's docs/gh-release.md](https://github.com/open-horizon-labs/unified-hifi-control/blob/v3/docs/gh-release.md#home-assistant-add-on-version-bumps)
+See [`unified-hifi-control` repo's docs/gh-release.md](https://github.com/open-horizon-labs/unified-hifi-control/blob/v4/docs/gh-release.md#home-assistant-add-on-version-bumps)
 for the bump procedure.
+
+The add-on consumes a published Docker image, not a Git branch. Every
+architecture is pinned to the same explicit UHC release as `config.yaml`;
+`latest` is deliberately unsupported because it would make an unchanged
+add-on version install different code over time. The current 3.7 alpha pin
+remains until the first multi-architecture `4.0.0-alpha.N` image is published.
 
 ## License
 
