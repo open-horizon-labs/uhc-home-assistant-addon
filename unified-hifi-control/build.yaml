@@ -4,8 +4,9 @@
 # the already-published, multi-arch `muness/unified-hifi-control` image —
 # Docker resolves the right platform layer automatically, so both arches
 # point at the same tag. Bump this tag whenever config.yaml's `version`
-# tracks a new unified-hifi-control release (see docs/gh-release.md in the
-# main repo).
+# tracks a new unified-hifi-control release (see docs/gh-release.md on the
+# main repo's v4 branch). Never use the mutable `latest` tag: Home Assistant
+# add-on versions must resolve to the same runtime for every installation.
 # NOTE (Tier 2 / ingress): the pinned tag must be a release that includes
 # unified-hifi-control#581 (UHC_INGRESS base-path support) — do not merge
 # this to main before that image tag exists on Docker Hub.
