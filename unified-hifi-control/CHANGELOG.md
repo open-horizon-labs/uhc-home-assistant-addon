@@ -2,6 +2,16 @@
 
 ## Unreleased
 
+## 4.0.0-alpha.6
+
+- Updates both amd64 and aarch64 installations to the published UHC
+  `4.0.0-alpha.6` image, pinned to this version rather than `latest`.
+- Moves the add-on to the v4 generation with Spotify, Apple Music companion,
+  Music Assistant, and the Home Assistant integration installed by the add-on.
+- Includes the HiPhi heartbeat-loop fix, a 15-minute steady heartbeat interval,
+  and persistent protection against runaway remote traffic. Local playback
+  remains independent of Cloud availability.
+
 - **Your zones are Home Assistant media players now — no broker, no HACS,
   no copying files.** The add-on installs the Unified Hi-Fi Control
   integration into Home Assistant itself. Restart Home Assistant once after

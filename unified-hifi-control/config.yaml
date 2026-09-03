@@ -1,10 +1,10 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Unified Hi-Fi Control
-version: "3.7.0-alpha.10"
+version: "4.0.0-alpha.6"
 slug: unified_hifi_control
 description: >-
-  Bridge Roon, LMS, UPnP/OpenHome, and HQPlayer to one control surface —
-  web UI, hardware knobs, and Claude/MCP.
+  Control Roon, LMS, Spotify, Apple Music, Music Assistant,
+  UPnP/OpenHome, and HQPlayer from one surface.
 url: "https://github.com/open-horizon-labs/unified-hifi-control"
 arch:
   - amd64
