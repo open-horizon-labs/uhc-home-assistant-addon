@@ -11,8 +11,8 @@
 # unified-hifi-control#581 (UHC_INGRESS base-path support) — do not merge
 # this to main before that image tag exists on Docker Hub.
 build_from:
-  amd64: docker.io/muness/unified-hifi-control:4.0.0-alpha.6
-  aarch64: docker.io/muness/unified-hifi-control:4.0.0-alpha.6
+  amd64: docker.io/muness/unified-hifi-control:4.0.0-alpha.9
+  aarch64: docker.io/muness/unified-hifi-control:4.0.0-alpha.9
 labels:
   org.opencontainers.image.title: Unified Hi-Fi Control
   org.opencontainers.image.description: >-

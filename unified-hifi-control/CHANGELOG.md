@@ -2,6 +2,15 @@
 
 ## Unreleased
 
+## 4.0.0-alpha.9
+
+- Updates both amd64 and aarch64 installations to the published UHC
+  `4.0.0-alpha.9` image, pinned to this version rather than `latest`.
+- Prevents a stalled Cloud snapshot timer from replaying missed ticks as a
+  burst and tripping cost protection after UHC resumes.
+- Includes the Library pagination repair and the persistent List / Cards view
+  preference added after alpha.6.
+
 ## 4.0.0-alpha.6
 
 - Updates both amd64 and aarch64 installations to the published UHC
