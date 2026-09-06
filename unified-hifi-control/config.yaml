@@ -1,6 +1,6 @@
 # https://developers.home-assistant.io/docs/add-ons/configuration#add-on-config
 name: Unified Hi-Fi Control
-version: "4.0.0-alpha.6"
+version: "4.0.0-alpha.9"
 slug: unified_hifi_control
 description: >-
   Control Roon, LMS, Spotify, Apple Music, Music Assistant,
