@@ -1,5 +1,16 @@
 # Changelog
 
+## 4.0.0-beta.1
+
+- First v4 beta, following alpha.9.
+- HiPhi Cloud now recovers automatically from ordinary outages with persisted,
+  bounded retries that slow to about every 15 minutes. Existing quarantine markers
+  still require deliberate Resume; local playback remains available.
+- Settings explains automatic retries, and logs include connection failures and
+  retry timing. Pairing identity, replay protection and traffic limits are preserved.
+- Pin both architectures to UHC 4.0.0-beta.1.
+
+
 ## Unreleased
 
 ## 4.0.0-alpha.9
