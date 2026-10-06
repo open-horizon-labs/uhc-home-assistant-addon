@@ -1,7 +1,7 @@
 # Isolated, temporary add-on for validating the Home Assistant MCP read path.
 # This must remain separate from the production Unified Hi-Fi Control add-on.
 name: UHC HA MCP Candidate
-version: "0.1.0"
+version: "0.1.1"
 slug: uhc_ha_mcp_candidate
 description: >-
   Temporary candidate for read-only Home Assistant MCP verification.

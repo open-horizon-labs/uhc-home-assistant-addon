@@ -1,6 +1,7 @@
-# The Supervisor supplies BUILD_FROM from build.yaml.
-ARG BUILD_FROM=docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e
-FROM ${BUILD_FROM}
+# Pin the reviewed multi-platform UHC base directly. Supervisor's legacy
+# build.yaml parser rejects digest references and otherwise substitutes its
+# generic Home Assistant base image.
+FROM docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e
 
 # The candidate wrapper reads its small options file without adding any HA
 # configuration or Supervisor API access.

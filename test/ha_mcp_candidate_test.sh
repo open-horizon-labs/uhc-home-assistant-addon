@@ -3,7 +3,6 @@ set -eu
 
 root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 config="$root/ha-mcp-candidate/config.yaml"
-build="$root/ha-mcp-candidate/build.yaml"
 run="$root/ha-mcp-candidate/run.sh"
 dockerfile="$root/ha-mcp-candidate/Dockerfile"
 
@@ -16,9 +15,9 @@ contains "$config" '  - aarch64'
 ! grep -Eq '^  - (armv7|armhf|i386)$' "$config"
 ! grep -Eq '^(map:|ingress:|services:)' "$config"
 ! grep -Eq '^[[:space:]]+- type: homeassistant_config' "$config"
-contains "$build" '  amd64: docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e'
-contains "$build" '  aarch64: docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e'
-! grep -Eq ':[^ ]*latest|feat-ha-mcp-state-read' "$build"
+test ! -e "$root/ha-mcp-candidate/build.yaml"
+contains "$dockerfile" 'FROM docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e'
+! grep -Eq ':[^ ]*latest|feat-ha-mcp-state-read|BUILD_FROM' "$dockerfile"
 contains "$run" 'export UHC_PORT RUST_LOG UHC_ADDON=1 UHC_REQUIRE_CONTROLLER_AUTH=1 UHC_MDNS_DISABLE=1 FIRMWARE_AUTO_UPDATE=false'
 contains "$dockerfile" 'RUN apk add --no-cache jq'
 contains "$run" 'export UHC_CONFIG_DIR=/data/uhc-ha-mcp-candidate'
