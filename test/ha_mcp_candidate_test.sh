@@ -15,8 +15,8 @@ contains "$config" '  - amd64'
 ! grep -Eq '^  - (aarch64|armv7|armhf|i386)$' "$config"
 ! grep -Eq '^(map:|ingress:|services:)' "$config"
 ! grep -Eq '^[[:space:]]+- type: homeassistant_config' "$config"
-contains "$build" '  amd64: docker.io/muness/unified-hifi-control:feat-ha-mcp-state-read'
-! grep -Fq 'latest' "$build"
+contains "$build" '  amd64: docker.io/muness/unified-hifi-control@sha256:ba7f7331f8400192e70437a936a85e261f707d8c035ea4023a9b7e2ec6bb007a'
+! grep -Eq ':[^ ]*latest|feat-ha-mcp-state-read' "$build"
 contains "$run" 'export UHC_PORT RUST_LOG UHC_ADDON=1 UHC_REQUIRE_CONTROLLER_AUTH=1 UHC_MDNS_DISABLE=1 FIRMWARE_AUTO_UPDATE=false'
 contains "$dockerfile" 'RUN apk add --no-cache jq'
 contains "$run" 'export UHC_CONFIG_DIR=/data/uhc-ha-mcp-candidate'

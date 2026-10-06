@@ -1,7 +1,7 @@
-# Candidate image produced by the UHC PR branch Docker build. This is a
-# temporary mutable branch tag; never use it for a production add-on release.
+# Candidate image built from the UHC PR source commit; pin the manifest digest
+# so this recipe cannot silently change if the descriptive tag is overwritten.
 build_from:
-  amd64: docker.io/muness/unified-hifi-control:feat-ha-mcp-state-read
+  amd64: docker.io/muness/unified-hifi-control@sha256:ba7f7331f8400192e70437a936a85e261f707d8c035ea4023a9b7e2ec6bb007a
 labels:
   org.opencontainers.image.title: UHC HA MCP Candidate
   org.opencontainers.image.description: Temporary isolated candidate for HA MCP read-path validation
