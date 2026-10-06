@@ -16,9 +16,7 @@ host_network: true
 options:
   port: 8089
   log_level: info
-  require_controller_auth: true
 schema:
   port: port
   log_level: list(trace|debug|info|warn|error)
-  require_controller_auth: bool
 homeassistant_api: true

@@ -5,6 +5,3 @@ configuration:
   log_level:
     name: Log level
     description: UHC log verbosity.
-  require_controller_auth:
-    name: Require controller authentication
-    description: Protect the candidate web and MCP endpoints.

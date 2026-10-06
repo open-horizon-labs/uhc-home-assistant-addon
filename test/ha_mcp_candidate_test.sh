@@ -16,7 +16,7 @@ contains "$config" '  - amd64'
 ! grep -Eq '^[[:space:]]+- type: homeassistant_config' "$config"
 contains "$build" '  amd64: docker.io/muness/unified-hifi-control:feat-ha-mcp-state-read'
 ! grep -Fq 'latest' "$build"
-contains "$run" 'export UHC_PORT RUST_LOG UHC_ADDON=1'
+contains "$run" 'export UHC_PORT RUST_LOG UHC_ADDON=1 UHC_REQUIRE_CONTROLLER_AUTH=1 UHC_MDNS_DISABLE=1 FIRMWARE_AUTO_UPDATE=false'
 ! grep -Eq '(^|[[:space:]])curl([[:space:]]|$)|api/services|persistent_notification|custom_components' "$run"
 
 printf '%s\n' 'HA MCP candidate manifest is isolated and read-only at startup.'
