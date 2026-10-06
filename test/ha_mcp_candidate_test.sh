@@ -5,6 +5,7 @@ root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 config="$root/ha-mcp-candidate/config.yaml"
 build="$root/ha-mcp-candidate/build.yaml"
 run="$root/ha-mcp-candidate/run.sh"
+dockerfile="$root/ha-mcp-candidate/Dockerfile"
 
 contains() { grep -Fqx -- "$2" "$1"; }
 contains "$config" 'slug: uhc_ha_mcp_candidate'
@@ -17,6 +18,10 @@ contains "$config" '  - amd64'
 contains "$build" '  amd64: docker.io/muness/unified-hifi-control:feat-ha-mcp-state-read'
 ! grep -Fq 'latest' "$build"
 contains "$run" 'export UHC_PORT RUST_LOG UHC_ADDON=1 UHC_REQUIRE_CONTROLLER_AUTH=1 UHC_MDNS_DISABLE=1 FIRMWARE_AUTO_UPDATE=false'
+contains "$dockerfile" 'RUN apk add --no-cache jq'
+contains "$run" 'export UHC_CONFIG_DIR=/data/uhc-ha-mcp-candidate'
+grep -Fq '"roon":false' "$run"
+grep -Fq '"mqtt":false' "$run"
 ! grep -Eq '(^|[[:space:]])curl([[:space:]]|$)|api/services|persistent_notification|custom_components' "$run"
 
 printf '%s\n' 'HA MCP candidate manifest is isolated and read-only at startup.'

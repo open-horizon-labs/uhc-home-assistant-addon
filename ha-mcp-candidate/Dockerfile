@@ -2,6 +2,10 @@
 ARG BUILD_FROM=docker.io/muness/unified-hifi-control:feat-ha-mcp-state-read
 FROM ${BUILD_FROM}
 
+# The candidate wrapper reads its small options file without adding any HA
+# configuration or Supervisor API access.
+RUN apk add --no-cache jq
+
 ARG BUILD_ARCH
 ARG BUILD_DATE
 ARG BUILD_DESCRIPTION
