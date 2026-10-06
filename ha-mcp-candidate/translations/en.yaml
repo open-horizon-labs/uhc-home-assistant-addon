@@ -1,0 +1,10 @@
+configuration:
+  port:
+    name: HTTP port
+    description: Candidate port on the Home Assistant host.
+  log_level:
+    name: Log level
+    description: UHC log verbosity.
+  require_controller_auth:
+    name: Require controller authentication
+    description: Protect the candidate web and MCP endpoints.

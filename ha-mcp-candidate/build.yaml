@@ -1,0 +1,9 @@
+# Candidate image produced by the UHC PR branch Docker build. This is a
+# temporary mutable branch tag; never use it for a production add-on release.
+build_from:
+  amd64: docker.io/muness/unified-hifi-control:feat-ha-mcp-state-read
+labels:
+  org.opencontainers.image.title: UHC HA MCP Candidate
+  org.opencontainers.image.description: Temporary isolated candidate for HA MCP read-path validation
+  org.opencontainers.image.source: https://github.com/open-horizon-labs/unified-hifi-control/pull/767
+  org.opencontainers.image.licenses: PolyForm-Noncommercial-1.0.0
