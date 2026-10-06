@@ -1,0 +1,28 @@
+#!/bin/sh
+set -eu
+
+root=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+config="$root/ha-mcp-candidate/config.yaml"
+run="$root/ha-mcp-candidate/run.sh"
+dockerfile="$root/ha-mcp-candidate/Dockerfile"
+
+contains() { grep -Fqx -- "$2" "$1"; }
+contains "$config" 'slug: uhc_ha_mcp_candidate'
+contains "$config" 'homeassistant_api: true'
+contains "$config" '  port: 8089'
+contains "$config" '  - amd64'
+contains "$config" '  - aarch64'
+! grep -Eq '^  - (armv7|armhf|i386)$' "$config"
+! grep -Eq '^(map:|ingress:|services:)' "$config"
+! grep -Eq '^[[:space:]]+- type: homeassistant_config' "$config"
+test ! -e "$root/ha-mcp-candidate/build.yaml"
+contains "$dockerfile" 'FROM docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e'
+! grep -Eq ':[^ ]*latest|feat-ha-mcp-state-read|BUILD_FROM' "$dockerfile"
+contains "$run" 'export UHC_PORT RUST_LOG UHC_ADDON=1 UHC_REQUIRE_CONTROLLER_AUTH=1 UHC_MDNS_DISABLE=1 FIRMWARE_AUTO_UPDATE=false'
+contains "$dockerfile" 'RUN apk add --no-cache jq'
+contains "$run" 'export UHC_CONFIG_DIR=/data/uhc-ha-mcp-candidate'
+grep -Fq '"roon":false' "$run"
+grep -Fq '"mqtt":false' "$run"
+! grep -Eq '(^|[[:space:]])curl([[:space:]]|$)|api/services|persistent_notification|custom_components' "$run"
+
+printf '%s\n' 'HA MCP candidate manifest is isolated and read-only at startup.'

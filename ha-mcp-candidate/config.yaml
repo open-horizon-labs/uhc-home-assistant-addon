@@ -1,0 +1,23 @@
+# Isolated, temporary add-on for validating the Home Assistant MCP read path.
+# This must remain separate from the production Unified Hi-Fi Control add-on.
+name: UHC HA MCP Candidate
+version: "0.1.1"
+slug: uhc_ha_mcp_candidate
+description: >-
+  Temporary candidate for read-only Home Assistant MCP verification.
+url: "https://github.com/open-horizon-labs/unified-hifi-control/pull/767"
+arch:
+  - amd64
+  - aarch64
+init: false
+startup: services
+host_network: true
+# Candidate uses a separate Supervisor /data volume and binds only port 8089.
+# No Home Assistant config mount, ingress panel, MQTT service, or integration install.
+options:
+  port: 8089
+  log_level: info
+schema:
+  port: port
+  log_level: list(trace|debug|info|warn|error)
+homeassistant_api: true
