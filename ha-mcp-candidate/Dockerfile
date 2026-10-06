@@ -1,5 +1,5 @@
 # The Supervisor supplies BUILD_FROM from build.yaml.
-ARG BUILD_FROM=docker.io/muness/unified-hifi-control@sha256:ba7f7331f8400192e70437a936a85e261f707d8c035ea4023a9b7e2ec6bb007a
+ARG BUILD_FROM=docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e
 FROM ${BUILD_FROM}
 
 # The candidate wrapper reads its small options file without adding any HA

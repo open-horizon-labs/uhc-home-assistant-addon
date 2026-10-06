@@ -8,6 +8,7 @@ description: >-
 url: "https://github.com/open-horizon-labs/unified-hifi-control/pull/767"
 arch:
   - amd64
+  - aarch64
 init: false
 startup: services
 host_network: true

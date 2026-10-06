@@ -12,10 +12,12 @@ contains "$config" 'slug: uhc_ha_mcp_candidate'
 contains "$config" 'homeassistant_api: true'
 contains "$config" '  port: 8089'
 contains "$config" '  - amd64'
-! grep -Eq '^  - (aarch64|armv7|armhf|i386)$' "$config"
+contains "$config" '  - aarch64'
+! grep -Eq '^  - (armv7|armhf|i386)$' "$config"
 ! grep -Eq '^(map:|ingress:|services:)' "$config"
 ! grep -Eq '^[[:space:]]+- type: homeassistant_config' "$config"
-contains "$build" '  amd64: docker.io/muness/unified-hifi-control@sha256:ba7f7331f8400192e70437a936a85e261f707d8c035ea4023a9b7e2ec6bb007a'
+contains "$build" '  amd64: docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e'
+contains "$build" '  aarch64: docker.io/muness/unified-hifi-control@sha256:33c8b030849826cbe7b44c2b3cb884d43743890cbd4c6c086dbd229f704faa6e'
 ! grep -Eq ':[^ ]*latest|feat-ha-mcp-state-read' "$build"
 contains "$run" 'export UHC_PORT RUST_LOG UHC_ADDON=1 UHC_REQUIRE_CONTROLLER_AUTH=1 UHC_MDNS_DISABLE=1 FIRMWARE_AUTO_UPDATE=false'
 contains "$dockerfile" 'RUN apk add --no-cache jq'
