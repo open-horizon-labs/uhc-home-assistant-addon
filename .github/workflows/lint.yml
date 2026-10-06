@@ -18,7 +18,7 @@ jobs:
       - name: Check production add-on and runtime versions
         run: ./test/version_pin_test.sh
       - name: Check isolated HA MCP candidate contract
-        run: ./test/ha_mcp_candidate_test.sh
+        run: sh ./test/ha_mcp_candidate_test.sh
 
   addon-lint:
     name: Add-on config lint
