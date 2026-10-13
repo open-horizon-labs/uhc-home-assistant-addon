@@ -1,5 +1,30 @@
 # Changelog
 
+## 4.0.0-beta.4
+
+Covers UHC 4.0.0-beta.2, beta.3 and beta.4; the add-on was last pinned to beta.1.
+
+- **Receivers and amplifiers (alpha).** UHC can now control the hardware your
+  zones play through: power, volume, mute and input on Denon/Marantz, WiiM,
+  Sonos, Yamaha MusicCast, BluOS, Cambridge, Onkyo/Integra/Pioneer, Arcam,
+  Hegel, Lyngdorf, Anthem, Trinnov and Eversolo, plus any Home Assistant
+  `media_player` as a fallback (via this add-on's existing Home Assistant API
+  access; UHC's own exported zones are never offered). Off by default: turn on
+  **Settings → Receivers & amplifiers**, then link a zone on the Devices page and
+  that zone's volume (knob, Watch, Home Assistant, MCP) drives the amplifier.
+  Discovery works inside the add-on because it runs on the host network.
+- Optional, local-only mismatch recording helps report devices that behave
+  differently from their published specs.
+- Frame artwork keeps faces and subjects in view when filling a landscape screen.
+- HiPhi Cloud shows a clear notice during a permission outage and reconnects
+  from Zones or Settings; local playback is unaffected.
+- From beta.3: connected assistants can retrieve sourced music context for the
+  playing track (`hifi_music_details`), with a paired HiPhi Cloud connection.
+- From beta.2: HQPlayer output routing with Roon track information on HiPhi
+  displays, steadier track display, and firmware selection per controller type
+  and release channel.
+- Pin both architectures to UHC 4.0.0-beta.4.
+
 ## 4.0.0-beta.1
 
 - First v4 beta, following alpha.9.
