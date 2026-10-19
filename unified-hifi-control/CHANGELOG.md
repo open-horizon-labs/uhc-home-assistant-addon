@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.0-beta.7
+
+- Linked amplifier volume and mute use the same device routing across HiPhi,
+  Garmin, Home Assistant, the web UI and MCP. Commands retain device limits,
+  confirmed readback and bounded dispatch lifetimes.
+- Restore Gemini-compatible MCP discovery and reduce tool catalog size.
+- Update runtime dependencies and pin both amd64 and aarch64 to the published
+  UHC 4.0.0-beta.7 image.
+
 ## 4.0.0-beta.4
 
 Covers UHC 4.0.0-beta.2, beta.3 and beta.4; the add-on was last pinned to beta.1.
