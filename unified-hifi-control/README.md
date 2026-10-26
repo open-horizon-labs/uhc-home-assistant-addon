@@ -38,5 +38,7 @@ Hi-Fi Control** from the list.
 - [Main project issues](https://github.com/open-horizon-labs/unified-hifi-control/issues)
 - [This add-on's issues](https://github.com/open-horizon-labs/uhc-home-assistant-addon/issues)
 
+If UHC is useful to you, you can [buy me a coffee](https://buymeacoffee.com/muness).
+
 [amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
 [aarch64-shield]: https://img.shields.io/badge/aarch64-yes-green.svg
