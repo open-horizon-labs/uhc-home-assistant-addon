@@ -1,5 +1,14 @@
 # Changelog
 
+## 4.0.0
+
+- Update both amd64 and aarch64 installations to the published stable UHC
+  4.0.0 image. Home Assistant now offers the stable update.
+- Saved Shortcuts appear above Library and play directly in the selected zone;
+  exact duplicate Roon matches report when the first match is sent to play.
+- Includes controller settings and explicit firmware updates on each device's
+  published channel, paired with stable HiPhi firmware 2.8.0.
+
 ## 4.0.0-beta.7
 
 - Linked amplifier volume and mute use the same device routing across HiPhi,
