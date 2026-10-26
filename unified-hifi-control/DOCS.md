@@ -233,3 +233,7 @@ should see a new extension advertising itself once you open the web UI
   (Settings → System → Logs → Supervisor) for image pull failures — the
   add-on build depends on being able to reach Docker Hub to pull the
   `muness/unified-hifi-control` base image.
+
+## Support development
+
+If UHC is useful to you, you can [buy me a coffee](https://buymeacoffee.com/muness).

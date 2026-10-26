@@ -59,6 +59,10 @@ architecture is pinned to the same explicit UHC release as `config.yaml`;
 add-on version install different code over time. The current 3.7 alpha pin
 remains until the first multi-architecture `4.0.0-alpha.N` image is published.
 
+## Support
+
+If UHC is useful to you, you can [buy me a coffee](https://buymeacoffee.com/muness).
+
 ## License
 
 [PolyForm Noncommercial 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0/),
